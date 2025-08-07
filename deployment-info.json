@@ -1,0 +1,17 @@
+{
+  "network": "testnet",
+  "deployer": "0xd9AC4745358458F5308069E876c6723d7bC2e8C6",
+  "timestamp": "2025-08-07T13:27:05.203Z",
+  "contracts": {
+    "SkillToken": "0x19fC0b6587e95C130beB90bEb04bCdF937896e90",
+    "AcademicCredentialToken": "0x06D40fecDc9d4D53e78247E18bf95Fa3982E0041",
+    "CertificationAuthority": "0x6b9eeA03B2A34FEbbfA608d5A4B0a51074bc8E82",
+    "SkillCredentialNFT": "0x7d5E39b55C3a6dAAAc0CA867cba0257541c592f2",
+    "SkillChain": "0x1D8e84c570e420b9C0E9d8E1E547B79880D3a3BA",
+    "TimedVault": "0x9F74F68fA881560FFf4Ba35A7fE60093311CA96A"
+  },
+  "configuration": {
+    "timedVaultReleaseTime": 1754576816,
+    "timedVaultAmount": "0.01 ETH"
+  }
+}

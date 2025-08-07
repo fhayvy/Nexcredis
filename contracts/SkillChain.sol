@@ -45,7 +45,6 @@ contract SkillChain is AccessControl {
     mapping(uint256 => EnumerableSet.AddressSet) private moduleParticipants;
     mapping(address => mapping(uint256 => LearnerProgress)) public learnerProgressData;
     mapping(uint256 => mapping(address => bool)) public hasLearnerJoined;
-    mapping(uint256 => uint256) public pricingUpdateTimestamps;
 
     event ModuleLaunched(uint256 indexed moduleId, string moduleName);
     event ModuleModified(uint256 indexed moduleId, string moduleName, bool isAvailable, uint256 hbarCost, uint256 tokenCost);
@@ -57,6 +56,10 @@ contract SkillChain is AccessControl {
     event PricingAdjusted(uint256 indexed moduleId, uint256 newHbarCost, uint256 newTokenCost);
 
     constructor(address _skillToken, address _credentialNFT, address _revenueWallet) {
+        require(_skillToken != address(0), "Invalid skill token address");
+        require(_credentialNFT != address(0), "Invalid credential NFT address");
+        require(_revenueWallet != address(0), "Invalid revenue wallet address");
+        
         _grantRole(DEFAULT_ADMIN_ROLE, msg.sender);
         _grantRole(PLATFORM_ADMIN_ROLE, msg.sender);
         skillToken = IERC20(_skillToken);
@@ -71,11 +74,14 @@ contract SkillChain is AccessControl {
     }
 
     function launchLearningModule(
-        string memory _moduleName, 
-        string memory _moduleDetails, 
+        string calldata _moduleName, 
+        string calldata _moduleDetails, 
         uint256 _hbarCost, 
         uint256 _tokenCost
     ) external onlyRole(INSTRUCTOR_ROLE) {
+        require(bytes(_moduleName).length > 0, "Module name cannot be empty");
+        require(bytes(_moduleDetails).length > 0, "Module details cannot be empty");
+        
         uint256 newModuleId = ++moduleIdCounter;
         learningModules[newModuleId] = LearningModule({
             moduleName: _moduleName,
@@ -114,7 +120,9 @@ contract SkillChain is AccessControl {
 
         emit LearnerRegistered(msg.sender, moduleId);
         emit PaymentProcessed(msg.sender, moduleId, msg.value, "HBAR");
-        payable(revenueWallet).transfer(msg.value);
+        
+        (bool success, ) = payable(revenueWallet).call{value: msg.value}("");
+        require(success, "Transfer to revenue wallet failed");
     }
 
     function registerWithTokens(uint256 moduleId) external onlyRole(LEARNER_ROLE) {
@@ -136,26 +144,19 @@ contract SkillChain is AccessControl {
     function updateLearnerProgress(
         uint256 moduleId, 
         address learnerAddress, 
-        string memory score, 
-        string memory feedback
+        string calldata score, 
+        string calldata feedback
     ) external onlyInstructorOfModule(moduleId) {
         require(hasLearnerJoined[moduleId][learnerAddress], "Learner not registered for this module");
         LearnerProgress storage progressRecord = learnerProgressData[learnerAddress][moduleId];
         progressRecord.finalScore = score;
         progressRecord.instructorFeedback = feedback;
-        emit ModuleModified(
-            moduleId, 
-            learningModules[moduleId].moduleName, 
-            learningModules[moduleId].isAvailable, 
-            learningModules[moduleId].hbarCost, 
-            learningModules[moduleId].tokenCost
-        );
     }
 
     function completeLearnerModule(
         uint256 moduleId, 
         address learnerAddress, 
-        string memory credentialURI
+        string calldata credentialURI
     ) external onlyInstructorOfModule(moduleId) {
         require(hasLearnerJoined[moduleId][learnerAddress], "Learner not registered");
         LearnerProgress storage progressRecord = learnerProgressData[learnerAddress][moduleId];
@@ -164,10 +165,13 @@ contract SkillChain is AccessControl {
         progressRecord.isFinished = true;
         emit ModuleFinished(learnerAddress, moduleId);
 
-        if (!progressRecord.hasCredential) {
-            credentialNFT.mintCredential(learnerAddress, credentialURI);
-            progressRecord.hasCredential = true;
-            emit CredentialAwarded(learnerAddress, moduleId);
+        if (!progressRecord.hasCredential && bytes(credentialURI).length > 0) {
+            try credentialNFT.mintCredential(learnerAddress, credentialURI) {
+                progressRecord.hasCredential = true;
+                emit CredentialAwarded(learnerAddress, moduleId);
+            } catch {
+                // NFT minting failed, continue without reverting
+            }
         }
     }
 
@@ -183,9 +187,9 @@ contract SkillChain is AccessControl {
         uint256 newHbarCost, 
         uint256 newTokenCost
     ) external onlyRole(PLATFORM_ADMIN_ROLE) {
+        require(learningModules[moduleId].isActive, "Module does not exist");
         learningModules[moduleId].hbarCost = newHbarCost;
         learningModules[moduleId].tokenCost = newTokenCost;
-        pricingUpdateTimestamps[moduleId] = block.timestamp;
         emit PricingAdjusted(moduleId, newHbarCost, newTokenCost);
     }
 
@@ -193,12 +197,20 @@ contract SkillChain is AccessControl {
         return moduleParticipants[moduleId].values();
     }
 
+    function getModuleParticipantCount(uint256 moduleId) external view returns (uint256) {
+        return moduleParticipants[moduleId].length();
+    }
+
     function updateRevenueWallet(address newWallet) external onlyRole(PLATFORM_ADMIN_ROLE) {
+        require(newWallet != address(0), "Invalid wallet address");
         revenueWallet = newWallet;
     }
 
     function withdrawContractHBAR() external onlyRole(PLATFORM_ADMIN_ROLE) {
-        payable(revenueWallet).transfer(address(this).balance);
+        uint256 balance = address(this).balance;
+        require(balance > 0, "No HBAR to withdraw");
+        (bool success, ) = payable(revenueWallet).call{value: balance}("");
+        require(success, "HBAR withdrawal failed");
     }
 
     function withdrawContractTokens() external onlyRole(PLATFORM_ADMIN_ROLE) {
@@ -208,14 +220,43 @@ contract SkillChain is AccessControl {
     }
 
     function assignLearnerRole(address learnerAddress) external onlyRole(PLATFORM_ADMIN_ROLE) {
+        require(learnerAddress != address(0), "Invalid address");
         _grantRole(LEARNER_ROLE, learnerAddress);
     }
 
     function assignInstructorRole(address instructorAddress) external onlyRole(PLATFORM_ADMIN_ROLE) {
+        require(instructorAddress != address(0), "Invalid address");
         _grantRole(INSTRUCTOR_ROLE, instructorAddress);
     }
 
     function assignCurriculumManagerRole(address managerAddress) external onlyRole(PLATFORM_ADMIN_ROLE) {
+        require(managerAddress != address(0), "Invalid address");
         _grantRole(CURRICULUM_MANAGER_ROLE, managerAddress);
+    }
+
+    function revokeLearnerRole(address learnerAddress) external onlyRole(PLATFORM_ADMIN_ROLE) {
+        _revokeRole(LEARNER_ROLE, learnerAddress);
+    }
+
+    function revokeInstructorRole(address instructorAddress) external onlyRole(PLATFORM_ADMIN_ROLE) {
+        _revokeRole(INSTRUCTOR_ROLE, instructorAddress);
+    }
+
+    function updateSkillToken(address newSkillToken) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(newSkillToken != address(0), "Invalid skill token address");
+        skillToken = IERC20(newSkillToken);
+    }
+
+    function updateCredentialNFT(address newCredentialNFT) external onlyRole(DEFAULT_ADMIN_ROLE) {
+        require(newCredentialNFT != address(0), "Invalid credential NFT address");
+        credentialNFT = ISkillCredentialNFT(newCredentialNFT);
+    }
+
+    function emergencyWithdraw() external onlyRole(DEFAULT_ADMIN_ROLE) {
+        uint256 balance = address(this).balance;
+        if (balance > 0) {
+            (bool success, ) = payable(msg.sender).call{value: balance}("");
+            require(success, "Emergency withdrawal failed");
+        }
     }
 }

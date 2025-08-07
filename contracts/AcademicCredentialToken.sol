@@ -96,26 +96,26 @@ contract AcademicCredentialToken is ERC721URIStorage, AccessControl {
     }
 
     function destroyCredential(uint256 credentialId) external onlyRole(ISSUER_ROLE) {
-        require(_ownerOf(credentialId) != address(0), "Credential does not exist"); // Updated for newer OpenZeppelin
+        require(ownerOf(credentialId) != address(0), "Credential does not exist");
         _burn(credentialId);
         delete credentialRecords[credentialId];
         emit CredentialDestroyed(credentialId);
     }
 
     function cancelCredential(uint256 credentialId, string memory justification) external onlyRole(MANAGER_ROLE) {
-        require(_ownerOf(credentialId) != address(0), "Credential does not exist"); // Updated for newer OpenZeppelin
+        require(ownerOf(credentialId) != address(0), "Credential does not exist");
         _burn(credentialId);
         delete credentialRecords[credentialId];
         emit CredentialCancelled(credentialId, justification);
     }
 
     function submitPrintOrder(uint256 credentialId, string memory orderId) external onlyRole(MANAGER_ROLE) {
-        require(_ownerOf(credentialId) != address(0), "Credential does not exist"); // Updated for newer OpenZeppelin
+        require(ownerOf(credentialId) != address(0), "Credential does not exist");
         emit PrintOrderSubmitted(credentialId, orderId);
     }
 
     function validateCredential(uint256 credentialId) public view returns (bool) {
-        require(_ownerOf(credentialId) != address(0), "Credential does not exist"); // Updated for newer OpenZeppelin
+        require(ownerOf(credentialId) != address(0), "Credential does not exist");
         return !isCredentialExpired(credentialId) && credentialRecords[credentialId].validUntil > block.timestamp;
     }
 
@@ -124,7 +124,7 @@ contract AcademicCredentialToken is ERC721URIStorage, AccessControl {
     }
 
     function redeemCredential(uint256 credentialId) external {
-        require(_ownerOf(credentialId) != address(0), "Credential does not exist"); // Updated for newer OpenZeppelin
+        require(ownerOf(credentialId) != address(0), "Credential does not exist");
         require(!credentialRedeemed[credentialId], "Credential already redeemed");
 
         credentialRedeemed[credentialId] = true;
@@ -136,7 +136,7 @@ contract AcademicCredentialToken is ERC721URIStorage, AccessControl {
     }
 
     function transferOwnership(address newOwner, uint256 credentialId) external {
-        require(_ownerOf(credentialId) != address(0), "Credential does not exist"); // Updated for newer OpenZeppelin
+        require(ownerOf(credentialId) != address(0), "Credential does not exist");
         require(!isCredentialExpired(credentialId), "Credential has expired");
 
         _transfer(msg.sender, newOwner, credentialId);
@@ -144,7 +144,7 @@ contract AcademicCredentialToken is ERC721URIStorage, AccessControl {
     }
 
     function updateCustomData(uint256 credentialId, string memory issuingBody, string memory documentTemplate) external onlyRole(MANAGER_ROLE) {
-        require(_ownerOf(credentialId) != address(0), "Credential does not exist"); // Updated for newer OpenZeppelin
+        require(ownerOf(credentialId) != address(0), "Credential does not exist");
         credentialRecords[credentialId].documentURI = documentTemplate;
         credentialRecords[credentialId].issuingBody = issuingBody;
     }
