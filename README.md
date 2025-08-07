@@ -4,7 +4,7 @@
 
 Nexcredis is a comprehensive decentralized platform that revolutionizes educational credentialing, instructor certification, and skill-based learning through blockchain technology. Built on Ethereum-compatible networks, Nexcredis provides a trusted, transparent, and immutable system for issuing, managing, and verifying academic credentials and professional certifications.
 
-## 🌟 Key Features
+## Key Features
 
 - **NFT-Based Academic Credentials**: Tamper-proof digital certificates stored on blockchain
 - **Instructor Certification System**: Comprehensive certification and reputation management for educators
@@ -13,7 +13,7 @@ Nexcredis is a comprehensive decentralized platform that revolutionizes educatio
 - **Institutional Verification**: Multi-tier institution verification and accreditation
 - **Time-Locked Vaults**: Secure fund management with time-based release mechanisms
 
-## 🏗️ Architecture Overview
+## Architecture Overview
 
 Nexcredis consists of five main smart contracts working together to create a complete educational ecosystem:
 
@@ -32,7 +32,7 @@ Nexcredis consists of five main smart contracts working together to create a com
                         └─────────────┘
 ```
 
-## 📋 Smart Contracts
+## Smart Contracts
 
 ### 1. AcademicCredentialToken.sol
 **ERC-721 NFT contract for academic credentials**
@@ -92,7 +92,7 @@ Nexcredis consists of five main smart contracts working together to create a com
   - Balance and time tracking
   - Event logging for transparency
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -168,7 +168,7 @@ npx hardhat run scripts/deploy-certification-authority.js --network mainnet
 # Deploy SkillChain
 npx hardhat run scripts/deploy-skill-chain.js --network mainnet
 
-# Deploy TimedVault (optional)
+# Deploy TimedVault
 npx hardhat run scripts/deploy-timed-vault.js --network mainnet
 ```
 
@@ -231,7 +231,7 @@ npx hardhat verify --network mainnet DEPLOYED_CONTRACT_ADDRESS
 - `LEARNER_ROLE`: Learning participation
 - `CURRICULUM_MANAGER_ROLE`: Curriculum oversight
 
-## 📊 Token Economics
+## Token Economics
 
 ### SKILL Token Distribution
 - **Maximum Supply**: 1,000,000,000 SKILL tokens
@@ -250,7 +250,7 @@ npx hardhat verify --network mainnet DEPLOYED_CONTRACT_ADDRESS
 | Instructor Certification | 500 |
 | Course Approval | 200 |
 
-## 🔧 Configuration
+## Configuration
 
 ### Setting Reward Rates
 ```solidity
@@ -275,7 +275,7 @@ certificationAuthority.createCertificationStandard(
 skillChain.adjustModulePricing(moduleId, newHbarCost, newTokenCost);
 ```
 
-## 📡 Events and Monitoring
+##  Events and Monitoring
 
 ### Key Events to Monitor
 
@@ -295,7 +295,7 @@ skillChain.adjustModulePricing(moduleId, newHbarCost, newTokenCost);
 - `TokensStaked`
 - `RewardsWithdrawn`
 
-## 🧪 Testing
+## Testing
 
 ### Running Tests
 ```bash
@@ -315,7 +315,7 @@ npx hardhat coverage
 - Edge case and security testing
 - Gas optimization tests
 
-## 🚨 Known Limitations
+##  Known Limitations
 
 1. **Gas Costs**: Complex operations may have high gas costs
 2. **Scalability**: Consider Layer 2 solutions for high-volume usage
@@ -323,31 +323,14 @@ npx hardhat coverage
 4. **Oracle Integration**: Price feeds may need oracle integration
 5. **Upgradeability**: Contracts are not upgradeable by design
 
-## 🛠️ Development Roadmap
-
-### Phase 1: Core Platform ✅
-- Basic credential issuance
-- Instructor certification
-- Token economics
-
-### Phase 2: Enhanced Features 🚧
-- Advanced analytics dashboard
-- Mobile application
-- API integrations
-
-### Phase 3: Ecosystem Expansion 📋
-- Cross-chain compatibility
-- Enterprise partnerships
-- Advanced governance features
-
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions to Nexcredis! Please follow these steps:
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
 5. Open a Pull Request
 
 ### Development Guidelines
@@ -359,7 +342,7 @@ We welcome contributions to Nexcredis! Please follow these steps:
 ## 📞 Support and Contact
 - **GitHub Issues**: [Report bugs or request features](https://github.com/fhayvy/Nexcredis/issues)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - OpenZeppelin for secure contract libraries
 - Ethereum community for blockchain infrastructure
