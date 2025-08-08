@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-neutral-silver/20;
+  }
+  
+  body {
+    @apply bg-neutral-navy text-neutral-white font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-neutral-slate;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-primary rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary-hover;
+  }
+}
+
+@layer components {
+  .glass-morphism {
+    @apply bg-white/10 backdrop-blur-md border border-white/20;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary to-hedera bg-clip-text text-transparent;
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-primary/20;
+  }
+
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:shadow-primary/30 active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-hedera hover:bg-hedera-dark text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:shadow-hedera/30 active:scale-95;
+  }
+
+  .input-field {
+    @apply bg-neutral-slate border border-neutral-silver/20 rounded-xl px-4 py-3 text-neutral-white placeholder-neutral-silver focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200;
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8 xl:px-12 2xl:px-16;
+  }
+
+  .container-responsive {
+    @apply max-w-7xl mx-auto section-padding;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+}
+
+/* Responsive typography */
+.responsive-text-xs { font-size: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem); }
+.responsive-text-sm { font-size: clamp(0.875rem, 0.8rem + 0.375vw, 1rem); }
+.responsive-text-base { font-size: clamp(1rem, 0.9rem + 0.5vw, 1.125rem); }
+.responsive-text-lg { font-size: clamp(1.125rem, 1rem + 0.625vw, 1.25rem); }
+.responsive-text-xl { font-size: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem); }
+.responsive-text-2xl { font-size: clamp(1.5rem, 1.3rem + 1vw, 1.875rem); }
+.responsive-text-3xl { font-size: clamp(1.875rem, 1.6rem + 1.375vw, 2.25rem); }
+.responsive-text-4xl { font-size: clamp(2.25rem, 1.9rem + 1.75vw, 3rem); }
+.responsive-text-5xl { font-size: clamp(3rem, 2.5rem + 2.5vw, 3.75rem); }
