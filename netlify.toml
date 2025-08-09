@@ -1,6 +1,6 @@
 [build]
   base = "nexcredis-frontend"
-  command = "npm run build"
+  command = "npm run build && npm run export"
   publish = ".next"
 
 [build.environment]
