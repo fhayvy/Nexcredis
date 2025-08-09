@@ -15,8 +15,8 @@ import {
   CogIcon,
   ArrowRightOnRectangleIcon
 } from '@heroicons/react/24/outline'
-import { useAuth } from '../../hooks/useAuth'
-import { useWeb3 } from '../../hooks/useWeb3'
+import { useAuth } from '@/hooks/use-auth'
+import { useWeb3 } from '@/hooks/use-web3'
 import WalletConnect from '../auth/WalletConnect'
 import NotificationCenter from '../dashboard/NotificationCenter'
 

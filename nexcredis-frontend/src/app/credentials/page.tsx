@@ -7,7 +7,7 @@ import {
   QrCodeIcon,
   ShareIcon,
   EyeIcon,
-  DownloadIcon,
+  ArrowDownTrayIcon,
   MagnifyingGlassIcon,
   FunnelIcon,
   TrophyIcon,
@@ -271,7 +271,7 @@ export default function CredentialsPage() {
                         <ShareIcon className="w-4 h-4" />
                       </button>
                       <button className="p-2 bg-neutral-charcoal/50 hover:bg-neutral-charcoal text-neutral-silver hover:text-neutral-white rounded-xl transition-colors duration-200">
-                        <DownloadIcon className="w-4 h-4" />
+                        <ArrowDownTrayIcon className="w-4 h-4" />
                       </button>
                       <button className="p-2 bg-neutral-charcoal/50 hover:bg-neutral-charcoal text-neutral-silver hover:text-neutral-white rounded-xl transition-colors duration-200">
                         <QrCodeIcon className="w-4 h-4" />
@@ -346,7 +346,7 @@ export default function CredentialsPage() {
                       <ShareIcon className="w-4 h-4" />
                     </button>
                     <button className="p-2 bg-neutral-charcoal/50 hover:bg-neutral-charcoal text-neutral-silver hover:text-neutral-white rounded-xl transition-colors duration-200">
-                      <DownloadIcon className="w-4 h-4" />
+                      <ArrowDownTrayIcon className="w-4 h-4" />
                     </button>
                   </div>
                 </motion.div>

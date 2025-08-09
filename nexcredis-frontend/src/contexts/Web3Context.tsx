@@ -86,6 +86,7 @@ export function Web3Provider({ children }: { children: ReactNode }) {
 
   const checkConnection = async () => {
     try {
+      if (!window.ethereum) return;
       const accounts = await window.ethereum.request({ method: 'eth_accounts' })
       if (accounts.length > 0) {
         await connect()

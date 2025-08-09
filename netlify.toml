@@ -1,0 +1,12 @@
+[build]
+  base = "nexcredis-frontend"
+  command = "npm run build"
+  publish = "nexcredis-frontend/.next"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
