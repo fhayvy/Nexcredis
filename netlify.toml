@@ -1,7 +1,7 @@
 [build]
   base = "nexcredis-frontend"
   command = "npm run build"
-  publish = "nexcredis-frontend/.next"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18"
