@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
   experimental: {
     optimizePackageImports: ['@heroicons/react', 'lucide-react', 'framer-motion'],
   },
   images: {
+    unoptimized: true,
     domains: ['placeholder.svg'],
     formats: ['image/webp', 'image/avif'],
   },
